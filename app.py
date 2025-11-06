@@ -11,6 +11,10 @@ nav = st.navigation(
             "pages/va/apply_template_to_campaign.py",
             title="Apply Template to Campaign",
         ),
+        st.Page(
+            "pages/va/upload_dnc.py",
+            title="Upload DNC List for Organization",
+        ),
     ]
 )
 nav.run()
