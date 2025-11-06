@@ -7,6 +7,10 @@ nav = st.navigation(
             "pages/va/filter_leads_from_campaign.py", title="Filter Leads From Campaign"
         ),
         st.Page("pages/va/add_follow_ups.py", title="Add Follow-ups to Campaigns"),
+        st.Page(
+            "pages/va/apply_template_to_campaign.py",
+            title="Apply Template to Campaign",
+        ),
     ]
 )
 nav.run()
