@@ -15,6 +15,14 @@ nav = st.navigation(
             "pages/va/upload_dnc.py",
             title="Upload DNC List for Organization",
         ),
+        st.Page(
+            "pages/va/test_email.py",
+            title="Send Test Email",
+        ),
+        st.Page(
+            "pages/va/test_cosine.py",
+            title="Test Cosine Similarity",
+        ),
     ]
 )
 nav.run()

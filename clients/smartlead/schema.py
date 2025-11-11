@@ -41,17 +41,17 @@ class SmartleadCampaign(BaseModel):
 
 class SmartleadLead(BaseModel):
     id: int
-    first_name: str
-    last_name: str
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
     email: str
-    phone_number: str
-    company_name: str
-    website: str
-    location: str
-    custom_fields: Dict[str, str]
-    linkedin_profile: str
-    company_url: str
-    is_unsubscribed: bool
+    phone_number: Optional[str] = None
+    company_name: Optional[str] = None
+    website: Optional[str] = None
+    location: Optional[str] = None
+    custom_fields: Optional[Dict[str, str]] = None
+    linkedin_profile: Optional[str] = None
+    company_url: Optional[str] = None
+    is_unsubscribed: Optional[bool] = None
 
 
 class SmartleadCampaignLead(BaseModel):

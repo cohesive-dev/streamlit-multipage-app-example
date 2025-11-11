@@ -6,24 +6,28 @@ from clients.smartlead.index import (
     add_sequences_to_campaign,
 )
 from clients.smartlead.schema import SmartleadCampaignSequenceInput
+import re
 
 
 def templatize_email_body(
-    email_body: Optional[str], company_name: str
+    email_body: Optional[str], company_name: str, title: Optional[str] = None
 ) -> Optional[str]:
-    """Very simple token replacement. Extend if you support more placeholders."""
     if email_body is None:
         return None
-    out = email_body
-    replacements = {
-        "{{companyName}}": company_name,
-        "{companyName}": company_name,
-        "[[COMPANY_NAME]]": company_name,
-        "<<COMPANY_NAME>>": company_name,
-    }
-    for k, v in replacements.items():
-        out = out.replace(k, v)
-    return out
+
+    # Regex pattern to match "name" not preceded by %sender-, first_, or last_
+    # and not followed by %
+    regex = r"(?<!%sender-)(?<!first_)(?<!last_)(?:\()?name(?:\))?(?!%)"
+
+    final_email_body = re.sub(regex, "%sender-name%", email_body, flags=re.IGNORECASE)
+
+    if company_name:
+        final_email_body = final_email_body.replace("Company", company_name)
+
+    if title:
+        final_email_body = final_email_body.replace("Title", title)
+
+    return final_email_body
 
 
 def apply_template_to_campaign_helper(
@@ -47,6 +51,7 @@ def apply_template_to_campaign_helper(
 
         raw_variants = seq.sequence_variants or seq.seq_variants or None
         sequence_variants: Optional[List] = None
+
         if raw_variants:
             sequence_variants = [
                 {
@@ -67,7 +72,7 @@ def apply_template_to_campaign_helper(
                 seq_delay_details={
                     "delay_in_days": int(seq.seq_delay_details.delayInDays)
                 },
-                sequence_variants=sequence_variants,
+                seq_variants=sequence_variants,
             )
         )
 
