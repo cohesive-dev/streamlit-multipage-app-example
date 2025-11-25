@@ -12,10 +12,6 @@ nav = st.navigation(
             title="Apply Template to Campaign",
         ),
         st.Page(
-            "pages/va/upload_dnc.py",
-            title="Upload DNC List for Organization",
-        ),
-        st.Page(
             "pages/va/test_email.py",
             title="Send Test Email",
         ),
@@ -42,6 +38,14 @@ nav = st.navigation(
         st.Page(
             "pages/va/setup_organization_twilio.py",
             title="Set Up Organization Twilio",
+        ),
+        st.Page(
+            "pages/va/remove_cohesive_accounts.py",
+            title="Remove Cohesive Accounts",
+        ),
+        st.Page(
+            "pages/va/ingest_cohesive_accounts.py",
+            title="Ingest Cohesive Accounts",
         ),
     ]
 )
