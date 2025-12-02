@@ -62,7 +62,7 @@ def deduplicate_linear_tickets():
             continue
 
         progress.progress(idx / len(groups))
-        time.sleep(10)
+        time.sleep(2)
 
     st.success(f"Total tickets closed: **{total_closed}**")
 

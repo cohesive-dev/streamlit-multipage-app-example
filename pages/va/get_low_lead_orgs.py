@@ -52,9 +52,9 @@ LEFT JOIN platform_organizations po ON slc."platformOrganizationId" = po.id
         grouped[c["platformOrganizationId"]].append(c)
 
     start_date = (
-        datetime.datetime.now() - datetime.timedelta(days=tenure_days)
+        datetime.datetime(2024, 11, 16) - datetime.timedelta(days=tenure_days)
     ).strftime("%Y-%m-%d")
-    end_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    end_date = datetime.datetime(2024, 11, 16).strftime("%Y-%m-%d")
 
     campaigns_with_low_leads = []
     file_name = (
@@ -82,6 +82,11 @@ LEFT JOIN platform_organizations po ON slc."platformOrganizationId" = po.id
 
     total = len(grouped)
     index = 0
+
+    print(len(grouped))
+
+    # Filter grouped to only include specific org_id
+    grouped = {k: v for k, v in grouped.items() if k == "cmd6kycde042ycl0t09txu8c9"}
 
     print(len(grouped))
 

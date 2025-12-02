@@ -10,6 +10,7 @@ class StatusEnum(str, Enum):
     COMPLETED = "COMPLETED"
     DRAFTED = "DRAFTED"
     ARCHIVED = "ARCHIVED"
+    STOPPED = "STOPPED"
 
 
 class SchedulerCronValue(BaseModel):

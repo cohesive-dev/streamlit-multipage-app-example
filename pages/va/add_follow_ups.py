@@ -70,7 +70,7 @@ def add_follow_ups_to_campaign(
 
     # Build inputs for the appended follow-up sequences (duplicates)
     clones: List[SmartleadCampaignSequenceInput] = []
-    for index, seq in enumerate(sequences):
+    for index, seq in enumerate(sequences[:2]):
         # New sequence numbering continues after existing length
         new_seq_number = len(sequences) + index + 1
         # First appended seq uses the provided delay_period; the rest keep their original delay

@@ -251,7 +251,6 @@ if st.button("🚀 Filter and Upload Leads", key="filter_upload_btn"):
                 whitelisted_areas=whitelisted_areas,
             )
         )
-
         if not leads_to_remove:
             st.info("✅ No leads matched the filter criteria.")
             # Clear stale state
