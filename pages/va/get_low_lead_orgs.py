@@ -51,10 +51,10 @@ LEFT JOIN platform_organizations po ON slc."platformOrganizationId" = po.id
     for c in tenured_campaigns:
         grouped[c["platformOrganizationId"]].append(c)
 
+    end_date = datetime.datetime.now().strftime("%Y-%m-%d")
     start_date = (
-        datetime.datetime(2024, 11, 16) - datetime.timedelta(days=tenure_days)
+        datetime.datetime.now() - datetime.timedelta(days=tenure_days)
     ).strftime("%Y-%m-%d")
-    end_date = datetime.datetime(2024, 11, 16).strftime("%Y-%m-%d")
 
     campaigns_with_low_leads = []
     file_name = (
@@ -83,13 +83,7 @@ LEFT JOIN platform_organizations po ON slc."platformOrganizationId" = po.id
     total = len(grouped)
     index = 0
 
-    print(len(grouped))
-
     # Filter grouped to only include specific org_id
-    grouped = {k: v for k, v in grouped.items() if k == "cmd6kycde042ycl0t09txu8c9"}
-
-    print(len(grouped))
-
     for org_id, org_campaigns in grouped.items():
         org_name = org_campaigns[0]["organizationName"] if org_campaigns else "Unknown"
 
@@ -108,7 +102,6 @@ LEFT JOIN platform_organizations po ON slc."platformOrganizationId" = po.id
                     start_date=start_date,
                     end_date=end_date,
                 )
-
                 if analytics.get("status") == "ACTIVE":
                     statistics["leadCount"] += int(
                         analytics.get("positive_reply_count", 0)
