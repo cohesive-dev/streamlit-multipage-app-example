@@ -3,16 +3,13 @@ import os
 from datetime import datetime
 from io import BytesIO
 
-from azure.storage.blob import ContentSettings
 import pandas as pd
 import streamlit as st
+from azure.storage.blob import ContentSettings
 
 from clients.azure_blob_storage.index import get_or_create_blob_service_client
-
-from clients.smartlead.index import (
-    get_campaign_by_id,
-    get_leads_by_campaign_id_with_pagination,
-)
+from clients.cohesive.index import get_campaign_leads_by_id_with_mapping
+from clients.smartlead.index import get_campaign_by_id
 from clients.smartlead.internal.index import remove_multiple_leads_from_campaign
 from common.utils import chunk_list, csv_to_json, get_gpt_answer
 
@@ -272,14 +269,18 @@ if st.button("🚀 Filter and Upload Leads", key="filter_upload_btn"):
             ss.filtered_blob_url = url
 
             # Precompute campaign leads & mapping
-            leads = get_leads_by_campaign_id_with_pagination(
+            leads = get_campaign_leads_by_id_with_mapping(
                 campaign_id=int(ss.selected_campaign_id)
             )
+
             # Match by email
             ss.lead_details = [
-                {"leadId": lead.lead.id, "leadMappingId": lead.campaign_lead_map_id}
+                {"leadId": lead["email_lead"]["id"], "leadMappingId": lead["id"]}
                 for lead in leads
-                if any(ltr.get("Email") == lead.lead.email for ltr in leads_to_remove)
+                if any(
+                    ltr.get("Email") == (lead.get("email_lead") or {}).get("email")
+                    for ltr in leads_to_remove
+                )
             ]
 
     # Ensure the “Remove” CTA renders immediately with the computed state
