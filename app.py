@@ -63,6 +63,10 @@ nav = st.navigation(
             "pages/va/restart_jobs.py",
             title="Restart Jobs",
         ),
+        st.Page(
+            "pages/va/mark_organizations_as_churned.py",
+            title="Mark organizations as churned",
+        ),
     ]
 )
 nav.run()
