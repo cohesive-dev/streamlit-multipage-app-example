@@ -12,9 +12,11 @@ import os
 from github import Github
 from typing import List, Any
 from datetime import datetime
+import concurrent.futures
 
 from common.utils import get_gpt_answer
 from common.spintax import validate_template
+import asyncio
 
 
 GITHUB_OWNER = "cohesive-dev"
@@ -181,6 +183,25 @@ def apply_gpt_editing(original_text: str, instruction: str) -> str:
     return get_gpt_answer(system_prompt, user_prompt)
 
 
+async def edit_variant_async(variant, seq_number, index):
+    key = f"seq_{seq_number}_var_{variant.id}"
+    original_text = html_to_text(variant.email_body)
+    st.toast(f"Editing Sequence {index + 1}, Variant {variant.variant_label}...")
+    loop = asyncio.get_event_loop()
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        edited_text = await loop.run_in_executor(
+            executor, apply_gpt_editing, original_text, instruction
+        )
+    return key, edited_text
+
+
+async def process_all_variants():
+    tasks = []
+    for variant in seq.sequence_variants:
+        tasks.append(edit_variant_async(variant, seq.seq_number, index))
+    return await asyncio.gather(*tasks)
+
+
 # Initialize session state
 if "sequences" not in st.session_state:
     st.session_state.sequences = None
@@ -277,12 +298,10 @@ if st.session_state.sequences:
         if instruction:
             st.session_state.current_instruction = instruction
             with st.spinner("Applying GPT editing to all variants..."):
-                for seq in st.session_state.sequences:
+                for index, seq in enumerate(st.session_state.sequences):
                     if seq.sequence_variants:
-                        for variant in seq.sequence_variants:
-                            key = f"seq_{seq.seq_number}_var_{variant.id}"
-                            original_text = html_to_text(variant.email_body)
-                            edited_text = apply_gpt_editing(original_text, instruction)
+                        results = asyncio.run(process_all_variants())
+                        for key, edited_text in results:
                             st.session_state.edited_variants[key] = edited_text
                 st.success("GPT editing applied to all variants!")
                 st.rerun()
