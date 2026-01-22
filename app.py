@@ -56,10 +56,6 @@ nav = st.navigation(
             title="Link Campaigns to Organization",
         ),
         st.Page(
-            "pages/va/edit_campaign_messages.py",
-            title="Edit Campaign Messages",
-        ),
-        st.Page(
             "pages/va/restart_jobs.py",
             title="Restart Jobs",
         ),

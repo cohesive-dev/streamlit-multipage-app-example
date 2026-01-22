@@ -219,8 +219,8 @@ if st.session_state.selected_commit and st.session_state.reverted_content:
         data = st.session_state.reverted_data
 
         # Display sequences and variants in readable text format
-        for seq in data.get("sequences", []):
-            st.markdown(f"### Sequence {seq.get('seq_number', 'N/A')}")
+        for index, seq in enumerate(data.get("sequences", [])):
+            st.markdown(f"### Sequence {index + 1}")
             st.markdown(f"**Subject:** {seq.get('subject', 'N/A')}")
 
             variants = seq.get("variants", [])
@@ -289,7 +289,6 @@ if st.session_state.selected_commit and st.session_state.reverted_content:
                         st.success(
                             f"✅ Successfully reverted campaign {st.session_state.selected_campaign_id} to commit {commit['short_sha']}"
                         )
-                        st.balloons()
 
                         # Clear state
                         st.session_state.selected_commit = None
