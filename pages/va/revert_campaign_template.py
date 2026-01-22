@@ -152,10 +152,10 @@ if campaigns:
     if selected_campaign_label:
         campaign_id = campaign_options[selected_campaign_label]
 
-        if st.button("Load Commit History", type="primary"):
+        if st.button("Load Edit History", type="primary"):
             repo = get_github_repo()
             if repo:
-                with st.spinner("Loading commit history..."):
+                with st.spinner("Loading edit history..."):
                     commits = get_file_commits(repo, campaign_id)
 
                 if commits:
