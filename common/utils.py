@@ -10,14 +10,14 @@ from clients.azure_blob_storage.index import get_or_create_blob_service_client
 def get_gpt_answer(system_prompt, user_prompt, temperature=0.7):
     openAIClient = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
     response = openAIClient.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
         ],
         temperature=temperature,
     )
-    return response.choices[0].message.content.strip().lower()
+    return response.choices[0].message.content
 
 
 def csv_to_json(file_content):

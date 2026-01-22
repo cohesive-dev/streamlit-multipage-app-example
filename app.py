@@ -67,6 +67,14 @@ nav = st.navigation(
             "pages/va/mark_organizations_as_churned.py",
             title="Mark organizations as churned",
         ),
+        st.Page(
+            "pages/va/edit_campaign.py",
+            title="Edit Campaign Template",
+        ),
+        st.Page(
+            "pages/va/revert_campaign_template.py",
+            title="Revert Campaign Template",
+        ),
     ]
 )
 nav.run()

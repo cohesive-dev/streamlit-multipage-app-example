@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Literal
 from pydantic import BaseModel, Field
 from datetime import datetime
 from enum import Enum
@@ -188,3 +188,34 @@ class SmartleadCampaignSequenceInput(BaseModel):
     email_body: Optional[str] = None
     seq_delay_details: Optional[SeqDelayDetailsInput] = None
     seq_variants: Optional[List[SequenceVariantInput]] = None
+
+
+class EmailSeqVariantMapping(BaseModel):
+    id: int
+    variant_label: str
+    __typename: Literal["email_seq_variant_mappings"]
+
+
+class EmailCampaignSeqMapping(BaseModel):
+    id: int
+    seq_number: int
+    subject: str
+    email_body: str
+    seq_type: str
+    seq_schedule_type: str
+    __typename: Literal["email_campaign_seq_mappings"]
+    email_seq_variant_mappings: List[EmailSeqVariantMapping]
+
+
+class EmailCampaign(BaseModel):
+    name: str
+    sequences: List[EmailCampaignSeqMapping]
+    __typename: Literal["email_campaigns"]
+
+
+class SmartleadGetCampaignSequencesViaGraphQLData(BaseModel):
+    email_campaigns_by_pk: EmailCampaign
+
+
+class SmartleadGetCampaignSequencesViaGraphQLResponse(BaseModel):
+    data: SmartleadGetCampaignSequencesViaGraphQLData

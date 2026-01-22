@@ -2,6 +2,51 @@ import os
 from typing import Any, Dict, Optional
 import requests
 
+from ..schema import SmartleadGetCampaignSequencesViaGraphQLResponse
+
+
+def get_campaign_sequences(
+    campaign_id: int,
+) -> Any:
+    query = """
+    query getSequencesByCampaignId($id: Int!) {
+      email_campaigns_by_pk(id: $id) {
+        name
+        sequences: email_campaign_seq_mappings(order_by: {seq_number: asc}) {
+          id
+          ...BasicEmailCampaignSeqMappingsFragment
+          email_seq_variant_mappings {
+            id
+            variant_label
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+    }
+
+    fragment BasicEmailCampaignSeqMappingsFragment on email_campaign_seq_mappings {
+      seq_number
+      subject
+      email_body
+      seq_type
+      seq_schedule_type
+      __typename
+    }
+    """
+
+    result = query_smartlead_internal_graphql_endpoint(
+        method="POST",
+        body={
+            "query": query,
+            "variables": {"id": campaign_id},
+            "operationName": "getSequencesByCampaignId",
+        },
+    )
+
+    return SmartleadGetCampaignSequencesViaGraphQLResponse.model_validate(result)
+
 
 def remove_multiple_leads_from_campaign(
     smartlead_campaign_id: str, email_lead_ids: list[int], email_lead_map_ids: list[int]
