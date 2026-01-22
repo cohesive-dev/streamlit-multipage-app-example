@@ -119,7 +119,7 @@ def commit_campaign_to_github(
             )
         return True
     except Exception as e:
-        st.error(f"Failed to commit to GitHub: {e}")
+        st.error(f"Failed to commit template: {e}")
         return False
 
 
@@ -226,7 +226,7 @@ campaign_id = campaign_options[selected_campaign_name]
 
 # Load Campaign Button
 if st.button("Load Campaign", type="primary"):
-    with st.spinner("Loading campaign and checking GitHub repository..."):
+    with st.spinner("Loading campaign and checking edit history..."):
         # Initialize GitHub repo
         repo = get_github_repo()
         if repo:
@@ -415,7 +415,7 @@ if st.session_state.sequences:
         value=f"Update campaign {campaign_id}",
     )
 
-    if st.button("Submit & Commit to GitHub", type="primary"):
+    if st.button("Submit & Commit Changes", type="primary"):
         if not commit_message:
             st.error("Please enter a commit message")
         elif not st.session_state.github_repo:
@@ -517,4 +517,4 @@ if st.session_state.sequences:
                     )
                     st.session_state.file_sha = new_sha
                 else:
-                    st.error("Failed to commit changes to GitHub")
+                    st.error("Failed to commit changes")
